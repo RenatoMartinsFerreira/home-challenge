@@ -26,18 +26,23 @@ const mock = [
   },
 ];
 
-export const UserDetails = () => {
+export const UserDetails = ({navigation, route}) => {
+  const {login, avatar_url} = route.params.user;
   return (
     <>
       <StatusBar barStyle={'light-content'} />
       <SafeAreaView style={styles.backgroundStyle}>
-        <Image
-          style={styles.image}
-          source={{
-            uri: mock[0].avatar_url,
-          }}
-        />
-        <Text>teste</Text>
+        <View style={styles.profile}>
+          <Image
+            style={styles.image}
+            source={{
+              uri: avatar_url,
+            }}
+          />
+          <View style={styles.description}>
+            <Text>{login}</Text>
+          </View>
+        </View>
       </SafeAreaView>
     </>
   );

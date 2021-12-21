@@ -1,11 +1,9 @@
 import axios from 'axios';
 
-const header = {
-  headers: {
-    'Content-type': 'application.json',
-  },
+const headers = {
+  Accept: 'application/vnd.github.v3+json',
 };
 
-export const get = url => {
-  axios.get(url, header);
+export const get = async url => {
+  axios.get(url, headers);
 };

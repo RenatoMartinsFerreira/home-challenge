@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, View, StatusBar, FlatList, Text} from 'react-native';
 import styles from './styles';
 import {DeveloperCard} from '../../components';
+import {getTopUsers} from '../../services';
+import axios from 'axios';
 
 const mock = [
   {
@@ -49,6 +51,31 @@ const mock = [
 ];
 
 export const Home = ({navigation}) => {
+  const [githubUsers, setGithubUsers] = useState([]);
+  const [loading, setLoading] = useState([]);
+
+  // useEffect(() => {
+  //   setLoading(false);
+  // }, [githubUsers]);
+
+  useEffect(() => {
+    const subscribe = navigation.addListener('focus', async () => {
+      axios
+        .get('https://api.github.com/users?page=0&per_page=5', {
+          Accept: 'application/vnd.github.v3+json',
+        })
+        .then(topUsers => {
+          console.log('topUsers.data', topUsers.data);
+
+          setGithubUsers(topUsers.data);
+        })
+        .catch(error => {
+          console.log('error', error);
+        });
+    });
+    return subscribe;
+  });
+
   return (
     <>
       <StatusBar barStyle={'light-content'} />
@@ -58,13 +85,14 @@ export const Home = ({navigation}) => {
 
         <FlatList
           style={styles.list}
-          data={mock}
+          extraData={githubUsers}
+          data={githubUsers}
           ItemSeparatorComponent={() => <View style={styles.separator} />}
           renderItem={({item}) => {
             return (
               <DeveloperCard
                 name={item.login}
-                onPress={() => navigation.navigate('UserDetails')}
+                onPress={() => navigation.navigate('UserDetails', {user: item})}
               />
             );
           }}

@@ -7,4 +7,10 @@ export default StyleSheet.create({
     aspectRatio: 1,
     borderRadius: normalize(100),
   },
+  profile: {
+    flexDirection: 'row',
+  },
+  description: {
+    flexDirection: 'column',
+  },
 });
